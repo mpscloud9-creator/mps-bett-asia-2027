@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MPS | Bett Asia 2027 Technology Excellence Dashboard</title>
+<style>
+:root{
+  --bg:#f5f1e8; --paper:#fffdf8; --ink:#263238; --muted:#687278;
+  --gold:#b8872d; --gold2:#d7b56d; --green:#285943; --green2:#5d8568;
+  --navy:#263d49; --rose:#9d625c; --line:#e5ddce; --shadow:0 18px 50px rgba(49,45,35,.10);
+  --radius:20px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+button,input,select,textarea{font:inherit}
+a{color:inherit}
+.app{display:flex;min-height:100vh}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:270px;background:linear-gradient(180deg,#213c35,#173029);color:#fff;padding:25px 18px;z-index:10;overflow:auto}
+.brand{padding:5px 12px 24px;border-bottom:1px solid rgba(255,255,255,.13)}
+.brand .crest{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#e2c178,#8f651d);color:#fff;font-weight:800;letter-spacing:1px;margin-bottom:13px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.brand h1{font-family:Georgia,serif;font-size:20px;line-height:1.15;margin:0 0 5px}
+.brand p{font-size:11px;opacity:.72;margin:0}
+.nav{padding-top:18px}
+.nav button{width:100%;border:0;background:transparent;color:#e8eee9;text-align:left;padding:11px 13px;border-radius:12px;cursor:pointer;margin:2px 0;display:flex;gap:10px;align-items:center}
+.nav button:hover,.nav button.active{background:rgba(215,181,109,.16);color:#fff}
+.nav span{width:22px;text-align:center}
+.sidebar-footer{margin-top:28px;padding:14px;border:1px solid rgba(255,255,255,.1);border-radius:15px;font-size:11px;color:#c9d4cf}
+.main{margin-left:270px;width:calc(100% - 270px)}
+.topbar{position:sticky;top:0;z-index:8;background:rgba(245,241,232,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:13px 32px;display:flex;justify-content:space-between;align-items:center}
+.breadcrumb{font-size:12px;color:var(--muted)}
+.actions{display:flex;gap:8px}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:10px;padding:9px 13px;cursor:pointer;font-weight:600}
+.btn.primary{background:var(--green);color:#fff;border-color:var(--green)}
+.btn.gold{background:var(--gold);color:#fff;border-color:var(--gold)}
+.btn:hover{transform:translateY(-1px)}
+.content{padding:30px 34px 60px;max-width:1500px;margin:auto}
+.hero{background:linear-gradient(125deg,#244a3e 0%,#315d4c 48%,#9a7027 145%);color:#fff;border-radius:28px;padding:42px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:330px;height:330px;border:1px solid rgba(255,255,255,.14);border-radius:50%;right:-80px;top:-110px;box-shadow:0 0 0 45px rgba(255,255,255,.035),0 0 0 90px rgba(255,255,255,.025)}
+.kicker{text-transform:uppercase;letter-spacing:2.5px;font-size:11px;color:#ead39b;font-weight:800}
+.hero h2{font:600 42px/1.08 Georgia,serif;max-width:850px;margin:12px 0 12px}
+.hero p{max-width:820px;color:#edf2ee;margin:0;font-size:16px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.pill{padding:7px 11px;border-radius:99px;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.15);font-size:12px}
+.section{margin-top:28px}
+.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:15px;gap:15px}
+.section h3{font:600 25px Georgia,serif;margin:0}
+.section-sub{font-size:12px;color:var(--muted)}
+.grid{display:grid;gap:16px}
+.metrics{grid-template-columns:repeat(4,minmax(0,1fr))}
+.metric,.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 8px 28px rgba(52,47,37,.05)}
+.metric{padding:20px;position:relative;overflow:hidden}
+.metric .icon{position:absolute;right:16px;top:15px;width:35px;height:35px;border-radius:10px;background:#eee4ce;display:grid;place-items:center}
+.metric .num{font:700 32px Georgia,serif;color:var(--green);margin-top:10px}
+.metric .label{font-weight:700;font-size:13px}
+.metric small{color:var(--muted);font-size:11px}
+.cards{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{padding:20px}
+.card h4{margin:0 0 7px;font-size:16px}
+.card p{margin:0;color:var(--muted);font-size:13px}
+.tag{display:inline-block;font-size:10px;text-transform:uppercase;letter-spacing:.8px;font-weight:800;padding:5px 8px;border-radius:99px;background:#efe5d0;color:#73551d;margin-bottom:10px}
+.pill-status{font-size:10px;border-radius:99px;padding:5px 8px;font-weight:700}
+.status-live{background:#e3f0e5;color:#285943}.status-progress{background:#f6ecd5;color:#8a641f}.status-planned{background:#eee9e3;color:#6b6259}
+.progress{height:8px;background:#e8e2d7;border-radius:99px;overflow:hidden;margin:11px 0 6px}
+.progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:99px}
+.two{grid-template-columns:1.35fr 1fr}
+.timeline{position:relative;padding-left:24px}
+.timeline:before{content:"";position:absolute;left:7px;top:3px;bottom:3px;width:2px;background:#d9cdb7}
+.titem{position:relative;padding:0 0 22px 18px}
+.titem:before{content:"";position:absolute;left:-1px;top:4px;width:11px;height:11px;background:var(--gold);border-radius:50%;box-shadow:0 0 0 4px #f4ead5}
+.titem strong{display:block;font-size:14px}.titem span{font-size:11px;color:var(--muted)}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{padding:11px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:#665d51;font-size:10px;text-transform:uppercase;letter-spacing:.7px}
+td input,td select{width:100%;min-width:90px;border:1px solid transparent;background:transparent;padding:5px;border-radius:7px}
+td input:focus,td select:focus{border-color:var(--gold2);outline:0;background:#fff}
+.case-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.case{border-left:5px solid var(--gold)}
+.case .case-title{display:flex;justify-content:space-between;gap:10px}
+.case .number{font:700 25px Georgia,serif;color:#b8872d}
+textarea,input,select{border:1px solid var(--line);background:#fffdf8;border-radius:10px;padding:10px;color:var(--ink);outline:none}
+textarea:focus,input:focus,select:focus{border-color:var(--gold2);box-shadow:0 0 0 3px rgba(184,135,45,.08)}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}
+.field{display:flex;flex-direction:column;gap:5px}.field label{font-size:11px;font-weight:800;color:#6d6457;text-transform:uppercase;letter-spacing:.5px}
+.field.full{grid-column:1/-1}
+.notice{padding:13px 15px;border-radius:12px;background:#f5eddc;border:1px solid #ead9b7;font-size:12px;color:#69562e}
+.quote{font:italic 19px/1.5 Georgia,serif;color:#385247;padding:18px 20px;border-left:4px solid var(--gold);background:#f8f3e8;border-radius:0 14px 14px 0}
+.footer{margin-top:35px;text-align:center;color:var(--muted);font-size:11px}
+.hidden{display:none!important}
+.toast{position:fixed;right:25px;bottom:25px;background:#213c35;color:#fff;padding:12px 17px;border-radius:12px;box-shadow:var(--shadow);opacity:0;transform:translateY(10px);transition:.25s;z-index:99;font-size:12px}
+.toast.show{opacity:1;transform:none}
+@media(max-width:1050px){.metrics{grid-template-columns:repeat(2,1fr)}.cards,.case-grid{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
+@media(max-width:780px){.sidebar{width:72px;padding:15px 10px}.brand h1,.brand p,.nav button b,.sidebar-footer{display:none}.brand{padding:5px 2px 18px}.brand .crest{margin:auto}.nav button{justify-content:center;padding:12px}.main{margin-left:72px;width:calc(100% - 72px)}.content{padding:18px}.topbar{padding:11px 16px}.hero{padding:28px 23px}.hero h2{font-size:31px}.metrics{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}}
+@media print{.sidebar,.topbar,.actions,.btn{display:none!important}.main{margin:0;width:100%}.content{padding:10px}.hero{box-shadow:none}.card,.metric{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">
+    <div class="crest">MPS</div>
+    <h1>Modern Public School</h1>
+    <p>Shalimar Bagh • Delhi</p>
+  </div>
+  <nav class="nav">
+    <button class="active" onclick="showSection('overview',this)"><span>⌂</span><b>Overview</b></button>
+    <button onclick="showSection('pillars',this)"><span>◈</span><b>Transformation Pillars</b></button>
+    <button onclick="showSection('projects',this)"><span>◆</span><b>Flagship Projects</b></button>
+    <button onclick="showSection('impact',this)"><span>◉</span><b>Impact Dashboard</b></button>
+    <button onclick="showSection('evidence',this)"><span>▤</span><b>Evidence Bank</b></button>
+    <button onclick="showSection('timeline',this)"><span>◷</span><b>Journey</b></button>
+    <button onclick="showSection('nomination',this)"><span>✦</span><b>Nomination Story</b></button>
+  </nav>
+  <div class="sidebar-footer">Bett Asia 2027 Working Profile<br><br>Editable • Offline • Local storage</div>
+</aside>
+
+<main class="main">
+<header class="topbar">
+  <div class="breadcrumb">BETT ASIA 2027 / TECHNOLOGY EXCELLENCE</div>
+  <div class="actions">
+    <button class="btn" onclick="window.print()">Print / PDF</button>
+    <button class="btn primary" onclick="saveAll()">Save Dashboard</button>
+  </div>
+</header>
+
+<div class="content">
+
+<section id="overview" class="page">
+  <div class="hero">
+    <div class="kicker">Bett Asia 2027 • Master Profile</div>
+    <h2>From Technology Users to Technology Creators</h2>
+    <p>Modern Public School's whole-school journey of AI, innovation, inclusion, cyber safety and social impact.</p>
+    <div class="hero-meta">
+      <span class="pill">AI-Enabled Learning</span><span class="pill">Student Innovation</span>
+      <span class="pill">Teacher Transformation</span><span class="pill">Inclusive Technology</span>
+      <span class="pill">Digital Citizenship</span><span class="pill">Sustainability</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><div><h3>At a Glance</h3><div class="section-sub">Core evidence currently captured in the master profile</div></div></div>
+    <div class="grid metrics">
+      <div class="metric"><div class="icon">◈</div><div class="label">Student Projects</div><div class="num" data-stat="projects">100+</div><small>Technology projects developed</small></div>
+      <div class="metric"><div class="icon">⚙</div><div class="label">Projects Deployed</div><div class="num" data-stat="deployed">10+</div><small>Current master-profile evidence</small></div>
+      <div class="metric"><div class="icon">◎</div><div class="label">Students Reached</div><div class="num" data-stat="students">1,200+</div><small>Existing portfolio evidence</small></div>
+      <div class="metric"><div class="icon">✦</div><div class="label">Flagship Case Studies</div><div class="num" data-stat="cases">10</div><small>Recommended for nomination</small></div>
+    </div>
+  </div>
+
+  <div class="section grid two">
+    <div class="card">
+      <span class="tag">Core Proposition</span>
+      <div class="quote">“Students should not merely consume technology; they should learn to create with it and use it to solve meaningful problems.”</div>
+      <p style="margin-top:14px">The MPS model follows <b>EMPOWER → INTEGRATE → CREATE → DEPLOY → IMPACT</b>.</p>
+    </div>
+    <div class="card">
+      <span class="tag">Impact Lens</span>
+      <h4>What should every technology initiative demonstrate?</h4>
+      <p>Problem → Technology → Implementation → Users → Outcome → Evidence</p>
+      <div class="progress"><i style="width:72%"></i></div>
+      <small>Portfolio readiness: <b>72% working profile</b></small>
+    </div>
+  </div>
+
+  <div class="section grid cards">
+    <div class="card"><span class="tag">Vision</span><h4>Technology as an Enabler</h4><p>Technology is positioned as an instrument for learning, creativity, inclusion, responsible citizenship and social impact.</p></div>
+    <div class="card"><span class="tag">Students</span><h4>Creators & Problem-Solvers</h4><p>Students identify authentic problems, design solutions, build prototypes, test them and work towards deployment.</p></div>
+    <div class="card"><span class="tag">Teachers</span><h4>Technology-Enabled Educators</h4><p>Professional learning supports AI, ICT, digital pedagogy, assessment, cyber safety, AR/VR and emerging technologies.</p></div>
+  </div>
+</section>
+
+<section id="pillars" class="page hidden">
+  <div class="section-head"><div><h3>Transformation Pillars</h3><div class="section-sub">The ten dimensions of the MPS technology story</div></div></div>
+  <div class="grid cards">
+    <div class="card"><span class="tag">01</span><h4>AI-Enabled Teaching & Learning</h4><p>AI in Grades IX–XII, AI Lab, purposeful AI tools, assessment, differentiated learning and classroom integration.</p></div>
+    <div class="card"><span class="tag">02</span><h4>Students as Technology Creators</h4><p>100+ student projects spanning AI, education, cyber safety, sustainability, data and social impact.</p></div>
+    <div class="card"><span class="tag">03</span><h4>Teacher Transformation</h4><p>Continuous professional learning in AI, ICT, digital pedagogy, assessment, AR/VR and emerging technologies.</p></div>
+    <div class="card"><span class="tag">04</span><h4>Inclusion Through Technology</h4><p>Differentiated resources, CWSN support, slow-learner resources, ADHD-oriented resources and accessibility tools.</p></div>
+    <div class="card"><span class="tag">05</span><h4>Cyber Safety & Digital Citizenship</h4><p>Cyber Club, Cyber Guardian, awareness programmes and responsible technology use.</p></div>
+    <div class="card"><span class="tag">06</span><h4>Technology for Sustainability</h4><p>E-waste, environmental AI projects, waste management, agriculture and net-zero awareness.</p></div>
+    <div class="card"><span class="tag">07</span><h4>Technology Beyond the Classroom</h4><p>Community outreach, NGO engagement, AR/VR exposure and technology awareness initiatives.</p></div>
+    <div class="card"><span class="tag">08</span><h4>School Digital Ecosystem</h4><p>School management, website, digital repositories, teacher portal and student learning resources.</p></div>
+    <div class="card"><span class="tag">09</span><h4>Gamification & Active Learning</h4><p>Scratch, AI games, interactive quizzes and technology-enabled engagement.</p></div>
+    <div class="card"><span class="tag">10</span><h4>Student Agency</h4><p>Identify → Research → Design → Build → Test → Improve → Deploy → Reflect.</p></div>
+  </div>
+</section>
+
+<section id="projects" class="page hidden">
+  <div class="section-head"><div><h3>Flagship Student Projects</h3><div class="section-sub">Edit status, users and evidence as your 2026–27 data grows</div></div><button class="btn gold" onclick="addProject()">+ Add Project</button></div>
+  <div class="grid case-grid" id="projectGrid"></div>
+</section>
+
+<section id="impact" class="page hidden">
+  <div class="section-head"><div><h3>Impact Dashboard</h3><div class="section-sub">Replace placeholders with verified 2026–27 evidence</div></div></div>
+  <div class="notice">Use only figures that can be supported by school records, programme registers, screenshots, assessment data, certificates, photographs or other documentary evidence.</div>
+  <div class="section card">
+    <div class="table-wrap">
+      <table id="impactTable">
+        <thead><tr><th>Indicator</th><th>Baseline / Current</th><th>2026–27 Target</th><th>Evidence / Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Teachers using AI</td><td><input data-k="teachersAI" value="To be measured"></td><td><input data-k="teachersTarget" value=""></td><td><input data-k="teachersNote" value=""></td></tr>
+          <tr><td>Students using AI-enabled learning</td><td><input data-k="studentsAI" value="To be measured"></td><td><input data-k="studentsAITarget" value=""></td><td><input data-k="studentsAINote" value=""></td></tr>
+          <tr><td>Student technology projects</td><td><input data-k="projectsTotal" value="100+"></td><td><input data-k="projectsTarget" value=""></td><td><input data-k="projectsNote" value=""></td></tr>
+          <tr><td>Projects deployed in school</td><td><input data-k="projectsDeployed" value="10+"></td><td><input data-k="deployedTarget" value=""></td><td><input data-k="deployedNote" value=""></td></tr>
+          <tr><td>Teachers reached beyond MPS</td><td><input data-k="externalTeachers" value="To be consolidated"></td><td><input data-k="externalTeachersTarget" value=""></td><td><input data-k="externalTeachersNote" value=""></td></tr>
+          <tr><td>Community beneficiaries</td><td><input data-k="community" value="To be measured"></td><td><input data-k="communityTarget" value=""></td><td><input data-k="communityNote" value=""></td></tr>
+          <tr><td>Inclusive digital resources</td><td><input data-k="inclusive" value="To be counted"></td><td><input data-k="inclusiveTarget" value=""></td><td><input data-k="inclusiveNote" value=""></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="section grid two">
+    <div class="card"><span class="tag">Impact Formula</span><h4>Claim + Number + Period + Evidence + Outcome</h4><p>Turn broad statements into award-ready evidence by attaching a measurable result and its documentary proof.</p></div>
+    <div class="card"><span class="tag">Priority</span><h4>Measure deployment, not just activity</h4><p>“100 projects created” becomes much stronger when the school can show how many reached real users and what changed.</p></div>
+  </div>
+</section>
+
+<section id="evidence" class="page hidden">
+  <div class="section-head"><div><h3>Evidence Bank</h3><div class="section-sub">Track every claim before the nomination opens</div></div><button class="btn gold" onclick="addEvidence()">+ Add Evidence</button></div>
+  <div class="card">
+    <div class="table-wrap">
+      <table id="evidenceTable">
+        <thead><tr><th>Evidence Area</th><th>Claim</th><th>Evidence Type</th><th>Status</th><th>Location / Link</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="timeline" class="page hidden">
+  <div class="section-head"><div><h3>MPS Technology Journey</h3><div class="section-sub">Working narrative for the Bett profile</div></div></div>
+  <div class="card timeline">
+    <div class="titem"><strong>Foundation — Digital Ecosystem</strong><span>School management, website, digital repositories and subject resources.</span></div>
+    <div class="titem"><strong>Teacher Empowerment</strong><span>Continuous AI/ICT, cyber safety, digital pedagogy and emerging-technology development.</span></div>
+    <div class="titem"><strong>AI in Learning</strong><span>AI education in Grades IX–XII, AI Lab and classroom integration.</span></div>
+    <div class="titem"><strong>Student Innovation</strong><span>Students move from technology consumers to creators through project-based innovation.</span></div>
+    <div class="titem"><strong>Deployment</strong><span>Selected student solutions move from prototype towards practical school use.</span></div>
+    <div class="titem"><strong>Social & Environmental Impact</strong><span>Cyber safety, sustainability, community engagement and technology outreach.</span></div>
+    <div class="titem"><strong>2026–27 — Evidence & Scale</strong><span>Systematic measurement of reach, adoption, outcomes and replicability for Bett Asia 2027.</span></div>
+  </div>
+  <div class="section card">
+    <span class="tag">Innovation Pipeline</span>
+    <h4 style="font-size:20px">IDENTIFY → RESEARCH → DESIGN → BUILD → TEST → IMPROVE → DEPLOY → REFLECT</h4>
+    <p>This pipeline should become a recurring visual motif across the final nomination and video.</p>
+  </div>
+</section>
+
+<section id="nomination" class="page hidden">
+  <div class="section-head"><div><h3>Nomination Story</h3><div class="section-sub">Editable working copy for the 2027 submission</div></div><button class="btn primary" onclick="copyNomination()">Copy Text</button></div>
+  <div class="card">
+    <div class="notice">Working draft based on the latest available Bett Asia framework. Update once the 2027 category wording and submission questions are published.</div>
+    <textarea id="nominationText" style="width:100%;min-height:650px;margin-top:15px">Modern Public School, Shalimar Bagh, Delhi, has developed a whole-school technology ecosystem built around a simple principle: students should not merely consume technology; they should learn to create with it and use it to solve meaningful problems.
+
+Our transformation has progressed from technology adoption to purposeful integration, student innovation and real-world deployment.
+
+AI has been integrated into the school's learning ecosystem, including AI education in Grades IX–XII, an AI Lab and professional development for teachers. Educators are supported in using AI and emerging technologies for lesson planning, differentiated learning, assessment, accessibility and student engagement.
+
+Our most distinctive initiative is our student innovation ecosystem. More than 100 student technology projects have emerged across AI, cyber safety, education, sustainability, data analysis and social impact. These include Cyber Guardian, Menti Bot, Healthara, IRIS, Agri Bot, Reading Bot, plant/tree recognition, student-performance analysis, garbage-management solutions and AI-enabled learning games.
+
+Importantly, our objective is not to count projects but to move promising ideas from prototype to practical use. Students are encouraged to identify authentic problems, design solutions, develop prototypes, test them and, where appropriate, deploy them within the school or community.
+
+The school also places strong emphasis on teacher transformation. AI, ICT, cyber safety, AR/VR, digital pedagogy and emerging technologies form part of an ongoing professional-learning ecosystem. MPS's contribution extends beyond its own campus through teacher-development and resource-person initiatives.
+
+Technology is also being used to promote inclusion through differentiated resources, digital content and accessibility features that support learners with diverse needs.
+
+Our work in cyber safety and digital citizenship complements our AI initiatives, ensuring that increased technological capability is accompanied by responsible and ethical use.
+
+Sustainability is another dimension of the school's technology strategy, with student projects and school initiatives connecting AI and digital innovation with environmental responsibility and e-waste awareness.
+
+Our vision is to create a scalable model in which teachers become technology-enabled educators, students become technology creators, and technology becomes an instrument for learning, inclusion, responsible citizenship and social impact.
+
+MPS's journey demonstrates that meaningful digital transformation is not defined by the number of devices or applications a school possesses. It is defined by what teachers and students are empowered to do with technology.</textarea>
+  </div>
+  <div class="section grid two">
+    <div class="card"><span class="tag">Video Headline</span><h4>From Technology Users to Technology Creators</h4><p>Recommended central message for the 30–60 second nomination video.</p></div>
+    <div class="card"><span class="tag">Video Flow</span><h4>Teachers → Students → Projects → Deployment → Impact</h4><p>Keep visuals evidence-led and show authentic student/teacher activity.</p></div>
+  </div>
+</section>
+
+<div class="footer">Modern Public School, Shalimar Bagh, Delhi • Bett Asia 2027 Working Dashboard • Data is stored locally in this browser.</div>
+</div>
+</main>
+</div>
+<div class="toast" id="toast">Saved locally</div>
+
+<script>
+const defaultProjects = [
+["Cyber Guardian","Cyber Safety","Student-led cyber-safety ecosystem","Live / Developing","School students","Guardian Bot, cyber buzzwords, password meter, knowledge checks, cyber news, games and tips"],
+["Menti Bot","Student Wellbeing","Conversational student-support innovation","Developing","Students","Student-created wellbeing and interaction bot"],
+["Healthara","AI for Social Impact","Youth-focused health-information innovation","Developing","Youth","AI-enabled information solution developed through student innovation"],
+["IRIS","Sustainability","Youth innovation for sustainability and net-zero awareness","Developing","Students","Sustainability-focused student initiative"],
+["Agri Bot","AI + Environment","AI application connected with agriculture","Developing","Students","AI and sustainability-oriented agriculture project"],
+["Reading Bot","Literacy","Technology supporting reading and learning","Developing","Students","Reading-focused digital/AI learning support"],
+["Plant / Tree Recognition","AI + Biology","Computer vision connected with biology and environment","Developing","Students","Recognition of plants/trees using AI concepts"],
+["Namaste AI","AI + Humanities","AI connected with History and Geography learning","Developing","Students","Subject-focused AI learning project"],
+["Student Performance Analysis","Data & Assessment","Data-informed analysis of student performance","Developing","Teachers / Students","Analysis supporting understanding of examination performance"],
+["Garbage Management","Sustainability","Technology-enabled waste-management solution","Developing","School community","Student-led approach to waste management"],
+["Communication Bot","School Communication","Student-created communication solution","Developing","School community","Technology-enabled communication support"],
+["Scratch & AI Games","Gamification","Programming and AI through interactive games","Live / Developing","Students","Subject-linked Scratch and AI learning games"]
+];
+let projects = JSON.parse(localStorage.getItem("mps_projects")||"null") || defaultProjects;
+let evidence = JSON.parse(localStorage.getItem("mps_evidence")||"null") || [
+["AI Transformation","AI integrated into Grades IX–XII and AI Lab established","Curriculum / photos","In progress","AI Lab folder"],
+["Teacher Development","Teachers trained in AI and emerging technologies","Certificates / attendance","In progress","Teacher training folder"],
+["Student Innovation","100+ student technology projects","Project repository","In progress","Student projects folder"],
+["Deployment","Selected student projects used in school","Screenshots / usage records","Needs data","Deployment evidence"],
+["Inclusion","Differentiated resources and accessibility tools","Samples / usage records","In progress","Inclusion folder"],
+["Cyber Safety","Cyber Guardian and awareness initiatives","Screenshots / reports","In progress","Cyber Safety folder"],
+["Sustainability","E-waste and environmental technology initiatives","Photos / awards","In progress","Sustainability folder"],
+["External Impact","Teacher development beyond MPS","Official records","Needs data","SCERT / CBSE folder"]
+];
+
+function showSection(id,btn){
+ document.querySelectorAll('.page').forEach(x=>x.classList.add('hidden'));
+ document.getElementById(id).classList.remove('hidden');
+ document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));
+ btn.classList.add('active'); window.scrollTo({top:0,behavior:'smooth'});
+}
+function toast(msg="Saved locally"){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
+function saveAll(){
+ localStorage.setItem("mps_projects",JSON.stringify(projects));
+ localStorage.setItem("mps_evidence",JSON.stringify(evidence));
+ const data={};document.querySelectorAll('#impactTable input').forEach(i=>data[i.dataset.k]=i.value);
+ localStorage.setItem("mps_impact",JSON.stringify(data));
+ localStorage.setItem("mps_nomination",document.getElementById('nominationText').value);
+ toast();
+}
+function loadAll(){
+ const imp=JSON.parse(localStorage.getItem("mps_impact")||"{}");
+ document.querySelectorAll('#impactTable input').forEach(i=>{if(imp[i.dataset.k]!==undefined)i.value=imp[i.dataset.k]});
+ const n=localStorage.getItem("mps_nomination");if(n)document.getElementById('nominationText').value=n;
+}
+function renderProjects(){
+ const grid=document.getElementById('projectGrid');grid.innerHTML='';
+ projects.forEach((p,i)=>{
+  const status=p[3]||"Developing";
+  const cls=status.toLowerCase().includes("live")?"status-live":status.toLowerCase().includes("develop")?"status-progress":"status-planned";
+  grid.innerHTML += `<div class="card case">
+   <div class="case-title"><div><div class="number">${String(i+1).padStart(2,'0')}</div><h4>${esc(p[0])}</h4></div><span class="pill-status ${cls}">${esc(status)}</span></div>
+   <p><b>Theme:</b> ${esc(p[1])}</p><p style="margin-top:6px"><b>Purpose:</b> ${esc(p[2])}</p><p style="margin-top:6px"><b>Users:</b> ${esc(p[4])}</p>
+   <div class="progress"><i style="width:${status.toLowerCase().includes("live")?85:55}%"></i></div>
+   <small>${esc(p[5])}</small>
+   <div style="margin-top:12px"><button class="btn" onclick="editProject(${i})">Edit</button> <button class="btn" onclick="removeProject(${i})">Remove</button></div>
+  </div>`;
+ });
+}
+function editProject(i){
+ const p=projects[i];
+ const name=prompt("Project name:",p[0]); if(name===null)return;
+ p[0]=name;p[1]=prompt("Theme:",p[1])||p[1];p[2]=prompt("Purpose:",p[2])||p[2];p[3]=prompt("Status (Live / Developing / Planned):",p[3])||p[3];p[4]=prompt("Users:",p[4])||p[4];p[5]=prompt("Short description:",p[5])||p[5];
+ saveAll();renderProjects();
+}
+function addProject(){projects.push(["New Project","Technology","Describe the problem and solution","Planned","Target users","Evidence and impact to be added"]);saveAll();renderProjects();toast("Project added")}
+function removeProject(i){if(confirm("Remove this project?")){projects.splice(i,1);saveAll();renderProjects()}}
+function renderEvidence(){
+ const tb=document.querySelector('#evidenceTable tbody');tb.innerHTML='';
+ evidence.forEach((e,i)=>{
+ tb.innerHTML += `<tr>
+ <td><input value="${attr(e[0])}" onchange="evidence[${i}][0]=this.value;saveAll()"></td>
+ <td><input value="${attr(e[1])}" onchange="evidence[${i}][1]=this.value;saveAll()"></td>
+ <td><input value="${attr(e[2])}" onchange="evidence[${i}][2]=this.value;saveAll()"></td>
+ <td><select onchange="evidence[${i}][3]=this.value;saveAll()">
+ <option ${e[3]=="Ready"?"selected":""}>Ready</option><option ${e[3]=="In progress"?"selected":""}>In progress</option><option ${e[3]=="Needs data"?"selected":""}>Needs data</option></select></td>
+ <td><input value="${attr(e[4])}" onchange="evidence[${i}][4]=this.value;saveAll()"></td>
+ <td><button class="btn" onclick="evidence.splice(${i},1);saveAll();renderEvidence()">×</button></td>
+ </tr>`;
+ });
+}
+function addEvidence(){evidence.push(["New Evidence Area","Enter claim","Evidence type","Needs data","Location / link"]);saveAll();renderEvidence();toast("Evidence row added")}
+function copyNomination(){navigator.clipboard.writeText(document.getElementById('nominationText').value).then(()=>toast("Nomination text copied"))}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function attr(s){return esc(s)}
+document.getElementById('nominationText').addEventListener('input',()=>localStorage.setItem("mps_nomination",document.getElementById('nominationText').value));
+document.querySelectorAll('#impactTable input').forEach(i=>i.addEventListener('input',()=>{const d=JSON.parse(localStorage.getItem("mps_impact")||"{}");d[i.dataset.k]=i.value;localStorage.setItem("mps_impact",JSON.stringify(d))}));
+renderProjects();renderEvidence();loadAll();
+</script>
+</body>
+</html>
